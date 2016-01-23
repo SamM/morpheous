@@ -74,7 +74,7 @@ Morpheous.morph = function(){
     console.log("Morpheous document's state has changed");
   }
 
-  setTimeout(Morpheous.request, Morpheous.delay);
+  Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
 };
 
 Morpheous.onResponse = function(ajax){
@@ -86,15 +86,18 @@ Morpheous.onResponse = function(ajax){
     if(Morpheous.current != Morpheous.loaded){
       Morpheous.morph();
     }else{
-      setTimeout(Morpheous.request, Morpheous.delay);
+      Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
     }
   }
 };
 
 Morpheous.request = function(){
+  clearTimeout(Morpheous.timeout);
+  Morpheous.timeout = null;
+
   if(Morpheous.stop) return;
   if(Morpheous.pause){
-    setTimeout(Morpheous.request, Morpheous.delay);
+    Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
     return;
   }
   var ajax = new XMLHttpRequest();
@@ -118,6 +121,7 @@ Morpheous.request = function(){
 Morpheous.start = function(e){
   Morpheous.current = "";
   Morpheous.loaded = "";
+  Morpheous.timeout = null;
   Morpheous.request();
 };
 

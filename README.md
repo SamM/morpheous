@@ -47,7 +47,11 @@ Here is a list of all of the settings that can be changed:
 
 `Morpheous.location`
 - This is the URL of the document that Morpheous will check for changes, and load the content of.
-- Default: `window.location.href` (the current URL of the page)
+- Default: `window.location.pathName` (the current URL of the page minus the query string)
+
+`Morpheous.data`
+- This javascript object gets parsed into a query string to append to the Morpheous.location string for sending parameters when making requests
+- Default: an object that has be generated based on the query string of the current page
 
 `Morpheous.method`
 - The HTTP request method that Morpheous uses when checking for updates.
