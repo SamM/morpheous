@@ -17,11 +17,15 @@ If you want an HTML document to become morpheous, include the Morpheous.js scrip
 You can also change the settings used by Morpheous by also creating your own script, like so:
 ```
 <script type="text/javascript">
-  var Morpheous = typeof Morpheous == "undefined" ? {} : Morpheous; // Required line
-  Morpheous.delay = 500;  // 0.5 Seconds
+  // This line is required:
+  var Morpheous = typeof Morpheous == "undefined" ? {} : Morpheous;
+
+  Morpheous.delay = 500; // 0.5 Seconds
+  Morpheous.log = false; // Logging off
 </script>
 ```
-The script above changes the delay between checking for updates. Here is a list of the settings that can be changed:
+The script above changes the delay between checking for updates to 500 milliseconds and turns logging off.
+Here is a list of all of the settings that can be changed:
 
 `Morpheous.delay`
 - This is the amount of time in milliseconds that Morpheous will wait before checking for an update.
