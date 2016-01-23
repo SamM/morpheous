@@ -14,3 +14,34 @@ If you want an HTML document to become morpheous, include the Morpheous.js scrip
 ```
 <script type="text/javascript" src="Morpheous.js"></script>
 ```
+You can also change the settings used by Morpheous by also creating your own script, like so:
+```
+<script type="text/javascript">
+  var Morpheous = typeof Morpheous == "undefined" ? {} : Morpheous; // Required line
+  Morpheous.delay = 500;  // 0.5 Seconds
+</script>
+```
+The script above changes the delay between checking for updates. Here is a list of the settings that can be changed:
+
+`Morpheous.delay`
+- This is the amount of time in milliseconds that Morpheous will wait before checking for an update.
+- Default: `1000` (One Second)
+
+`Morpheous.pause`
+- When this is `true`: Morpheous will wait until it is set back to `false` before checking for another update.
+- Default: `false`
+
+`Morpheous.stop`
+- When this is `true`: Morpheous will stop checking for updates.
+- To start Morpheous again, change `Morpheous.stop` back to `false` and call `Morpheous.start()`.
+- Default: `false`
+
+`Morpheous.log`
+- When this is `true`: A message will be logged to the console every time the page is updated by Morpheous.
+- Default: `true`
+
+`Morpheous.location`
+- This is the URL of the document that Morpheous will check for changes, and load the content of.
+- Default: the current URL of the page
+
+Any of these variables can also be changed at any time from the console.
