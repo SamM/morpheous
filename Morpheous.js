@@ -28,6 +28,10 @@ if(typeof Morpheous.log == "undefined")
 {
   Morpheous.log = true;
 }
+if(typeof Morpheous.method == "undefined")
+{
+  Morpheous.method = "POST";
+}
 
 Morpheous.morph = function(){
   var loaded = document.implementation.createHTMLDocument("morpheous");
@@ -69,7 +73,7 @@ Morpheous.request = function(){
   ajax.onreadystatechange = function() {
     Morpheous.onResponse(ajax);
   };
-  ajax.open("POST", Morpheous.location, true);
+  ajax.open(Morpheous.method, Morpheous.location, true);
   ajax.send();
 };
 
