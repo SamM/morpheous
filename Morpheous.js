@@ -4,10 +4,10 @@
 **  Created on: 23 January 2016
 */
 
-if(typeof Morpheous == "undefined")
-{
-  var Morpheous = {};
-}
+var Morpheous = typeof Morpheous == "undefined" ? {} : Morpheous;
+
+// Default data fields:
+
 if(typeof Morpheous.location == "undefined")
 {
   Morpheous.location = window.location.pathname;
@@ -48,15 +48,14 @@ if(typeof Morpheous.data == "undefined")
   Morpheous.data = data;
 }
 
-Morpheous.serialize = function(data){
-  var str = [];
-  for(var p in data){
-    if (data.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
-    }
+// Methods:
+
+Morpheous.check = function(){
+  if(Morpheous.timeout == null){
+    Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
   }
-  return str.join("&");
 };
+
 Morpheous.morph = function(){
   var loaded = document.implementation.createHTMLDocument("morpheous");
   loaded.documentElement.innerHTML = Morpheous.loaded;
@@ -74,7 +73,7 @@ Morpheous.morph = function(){
     console.log("Morpheous document's state has changed");
   }
 
-  Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
+  Morpheous.check();
 };
 
 Morpheous.onResponse = function(ajax){
@@ -86,25 +85,35 @@ Morpheous.onResponse = function(ajax){
     if(Morpheous.current != Morpheous.loaded){
       Morpheous.morph();
     }else{
-      Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
+      Morpheous.check();
     }
   }
 };
 
-Morpheous.request = function(){
+Morpheous.serialize = function(data){
+  var str = [];
+  for(var p in data){
+    if (data.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
+    }
+  }
+  return str.join("&");
+};
+
+Morpheous.request = function(data){
   clearTimeout(Morpheous.timeout);
   Morpheous.timeout = null;
 
   if(Morpheous.stop) return;
   if(Morpheous.pause){
-    Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
+    Morpheous.check();
     return;
   }
   var ajax = new XMLHttpRequest();
   ajax.onreadystatechange = function() {
     Morpheous.onResponse(ajax);
   };
-  var params = Morpheous.serialize(Morpheous.data);
+  var params = Morpheous.serialize(typeof data == "object" ? data : Morpheous.data);
   var url = Morpheous.location;
   if(params.length){
     if(url.indexOf("?")>-1){
@@ -118,12 +127,29 @@ Morpheous.request = function(){
   ajax.send();
 };
 
-Morpheous.start = function(e){
+Morpheous.unpause = function(data){
+  Morpheous.pause = false;
+  Morpheous.request(data);
+}
+
+Morpheous.clear = function(){
   Morpheous.current = "";
   Morpheous.loaded = "";
   Morpheous.timeout = null;
+}
+
+Morpheous.start = function(e){
+  Morpheous.clear();
   Morpheous.request();
 };
+
+Morpheous.restart = function(data){
+  Morpheous.stop = false;
+  Morpheous.clear();
+  Morpheous.request(data);
+}
+
+// Attach onLoad event:
 
 if(window.attachEvent) {
   window.attachEvent('onload', Morpheous.start);
