@@ -51,7 +51,7 @@ Here is a list of all of the settings that can be changed:
 
 `Morpheous.method`
 - The HTTP request method that Morpheous uses when checking for updates.
-- Must be either `POST` or `GET`
-- Default: `POST` (to prevent caching)
+- Must be either `"POST"` or `"GET"`
+- Default: `"POST"` (to prevent caching)
 
 Any of these variables can also be changed at any time from the console.
