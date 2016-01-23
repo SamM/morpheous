@@ -25,6 +25,7 @@ You can also change the settings used by Morpheous by also creating your own scr
 </script>
 ```
 The script above changes the delay between checking for updates to 500 milliseconds and turns logging off.
+
 Here is a list of all of the settings that can be changed:
 
 `Morpheous.delay`
@@ -46,6 +47,11 @@ Here is a list of all of the settings that can be changed:
 
 `Morpheous.location`
 - This is the URL of the document that Morpheous will check for changes, and load the content of.
-- Default: the current URL of the page
+- Default: `window.location.href` (the current URL of the page)
+
+`Morpheous.method`
+- The HTTP request method that Morpheous uses when checking for updates.
+- Must be either `POST` or `GET`
+- Default: `POST` (to prevent caching)
 
 Any of these variables can also be changed at any time from the console.
