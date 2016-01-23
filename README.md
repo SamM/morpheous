@@ -2,7 +2,7 @@
 #### Created by Sam Mulqueen
 ---
 #### What is Morpheous.js?
-Morpheous.js is a simple javascript file that can be included in any HTML page. It checks for changes in the HTML file by making XMLHttpRequests and updates the title and body of the current HTML document to match the changed document. This means the document can be in a continuously morphing state or morpheous state, and it is constantly kept up to date to match the server's version of the file.
+Morpheous.js is a simple javascript file that can be included in any HTML page. It checks for changes in the HTML file by making XMLHttpRequests and updates the title and body of the current HTML document to match the changed document. This means the document can be in a continuously morphing state or _morpheous state_, and it is constantly kept up to date to match the server's version of the file.
 
 #### What is Morpheous.js useful for?
 Morpheous HTML documents are useful when you have content that is constantly changing. A page that displays the current time would be a good example of this. Each time you refresh the page it will display the time it was when you refreshed the page. When Morpheous.js is added to this page, the time being displayed keeps updating; Morpheous.js is actively refreshing the content of the page, keeping it fresh.
