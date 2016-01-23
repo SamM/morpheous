@@ -21,10 +21,10 @@ You can also change the settings used by Morpheous by also creating your own scr
   var Morpheous = typeof Morpheous == "undefined" ? {} : Morpheous;
 
   Morpheous.delay = 500; // 0.5 Seconds
-  Morpheous.log = false; // Logging off
+  Morpheous.log = true; // Logging on
 </script>
 ```
-The script above changes the delay between checking for updates to 500 milliseconds and turns logging off.
+The script above changes the delay between checking for updates to 500 milliseconds and turns logging on.
 
 Here is a list of all of the settings that can be changed:
 
@@ -43,7 +43,7 @@ Here is a list of all of the settings that can be changed:
 
 `Morpheous.log`
 - When this is `true`: A message will be logged to the console every time the page is updated by Morpheous.
-- Default: `true`
+- Default: `false`
 
 `Morpheous.location`
 - This is the URL of the document that Morpheous will check for changes, and load the content of.
@@ -53,5 +53,9 @@ Here is a list of all of the settings that can be changed:
 - The HTTP request method that Morpheous uses when checking for updates.
 - Must be either `"POST"` or `"GET"`
 - Default: `"POST"` (to prevent caching)
+
+`Morpheous.onUpdate`
+- This function is called every time the page is updated by Morpheous.
+- Default: `function(doc){}` (`doc` is the full updated html document)
 
 Any of these variables can also be changed at any time from the console.
