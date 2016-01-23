@@ -12,9 +12,21 @@ if(typeof Morpheous.location == "undefined")
 {
   Morpheous.location = window.location.pathname;
 }
+if(typeof Morpheous.smoothness == "undefined")
+{
+  Morpheous.smoothness = 60;
+}
 if(typeof Morpheous.delay == "undefined")
 {
-  Morpheous.delay = 1000; // One Second
+  Morpheous.delay = 0;
+}
+if(typeof Morpheous.min_delay == "undefined")
+{
+  Morpheous.min_delay = 10; // 0.01 Seconds
+}
+if(typeof Morpheous.max_delay == "undefined")
+{
+  Morpheous.max_delay = 1000; // 1 Second
 }
 if(typeof Morpheous.pause == "undefined")
 {
@@ -50,8 +62,21 @@ if(typeof Morpheous.data == "undefined")
 
 // Methods:
 
-Morpheous.check = function(){
+Morpheous.rev = function(data){
+  var old_rev_time = Morpheous.rev_time;
+  Morpheous.rev_time = (new Date()).getTime();
+
+  if((new Date()).getTime() - old_rev_time > Morpheous.min_delay){
+    Morpheous.request(data);
+  }
+}
+
+Morpheous.idle = function(){
   if(Morpheous.timeout == null){
+    Morpheous.delay = (new Date()).getTime() - Morpheous.rev_time;
+    Morpheous.delay = Morpheous.delay / Morpheous.smoothness;
+    Morpheous.delay = Math.min(Morpheous.max_delay, Morpheous.delay);
+    Morpheous.delay = Math.max(Morpheous.min_delay, Morpheous.delay);
     Morpheous.timeout = setTimeout(Morpheous.request, Morpheous.delay);
   }
 };
@@ -73,7 +98,7 @@ Morpheous.morph = function(){
     console.log("Morpheous document's state has changed");
   }
 
-  Morpheous.check();
+  Morpheous.idle();
 };
 
 Morpheous.onResponse = function(ajax){
@@ -85,7 +110,7 @@ Morpheous.onResponse = function(ajax){
     if(Morpheous.current != Morpheous.loaded){
       Morpheous.morph();
     }else{
-      Morpheous.check();
+      Morpheous.idle();
     }
   }
 };
@@ -106,7 +131,7 @@ Morpheous.request = function(data){
 
   if(Morpheous.stop) return;
   if(Morpheous.pause){
-    Morpheous.check();
+    Morpheous.idle();
     return;
   }
   var ajax = new XMLHttpRequest();
@@ -129,6 +154,7 @@ Morpheous.request = function(data){
 
 Morpheous.unpause = function(data){
   Morpheous.pause = false;
+  Morpheous.rev();
   Morpheous.request(data);
 }
 
@@ -136,16 +162,19 @@ Morpheous.clear = function(){
   Morpheous.current = "";
   Morpheous.loaded = "";
   Morpheous.timeout = null;
+  Morpheous.rev_time = (new Date()).getTime();
 }
 
 Morpheous.start = function(e){
   Morpheous.clear();
+  Morpheous.rev();
   Morpheous.request();
 };
 
 Morpheous.restart = function(data){
   Morpheous.stop = false;
   Morpheous.clear();
+  Morpheous.rev();
   Morpheous.request(data);
 }
 
