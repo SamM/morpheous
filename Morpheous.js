@@ -26,11 +26,15 @@ if(typeof Morpheous.stop == "undefined")
 }
 if(typeof Morpheous.log == "undefined")
 {
-  Morpheous.log = true;
+  Morpheous.log = false;
 }
 if(typeof Morpheous.method == "undefined")
 {
   Morpheous.method = "POST";
+}
+if(typeof Morpheous.onUpdate == "undefined")
+{
+  Morpheous.onUpdate = function(doc){};
 }
 
 Morpheous.morph = function(){
@@ -41,6 +45,10 @@ Morpheous.morph = function(){
   document.body.innerHTML = loaded.body.innerHTML;
 
   Morpheous.current = Morpheous.loaded;
+
+  if(typeof Morpheous.onUpdate == "function"){
+    Morpheous.onUpdate(loaded);
+  }
 
   if(Morpheous.log){
     console.log("Morpheous document's state has changed");
