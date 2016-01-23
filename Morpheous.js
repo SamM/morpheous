@@ -10,7 +10,7 @@ if(typeof Morpheous == "undefined")
 }
 if(typeof Morpheous.location == "undefined")
 {
-  Morpheous.location = window.location.href;
+  Morpheous.location = window.location.pathname;
 }
 if(typeof Morpheous.delay == "undefined")
 {
@@ -36,7 +36,27 @@ if(typeof Morpheous.onUpdate == "undefined")
 {
   Morpheous.onUpdate = function(doc){};
 }
+if(typeof Morpheous.data == "undefined")
+{
+  var search = window.location.search.substr(1);
+  var params = search.split("&");
+  var data = {};
+  params.forEach(function(str){
+    var parts = str.split("=");
+    data[parts[0]] = parts[1];
+  });
+  Morpheous.data = data;
+}
 
+Morpheous.serialize = function(data){
+  var str = [];
+  for(var p in data){
+    if (data.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
+    }
+  }
+  return str.join("&");
+};
 Morpheous.morph = function(){
   var loaded = document.implementation.createHTMLDocument("morpheous");
   loaded.documentElement.innerHTML = Morpheous.loaded;
@@ -81,7 +101,17 @@ Morpheous.request = function(){
   ajax.onreadystatechange = function() {
     Morpheous.onResponse(ajax);
   };
-  ajax.open(Morpheous.method, Morpheous.location, true);
+  var params = Morpheous.serialize(Morpheous.data);
+  var url = Morpheous.location;
+  if(params.length){
+    if(url.indexOf("?")>-1){
+      url = url+"&"+params;
+    }else{
+      url = url+"?"+params;
+    }
+  }
+  ajax.open(Morpheous.method, url, true);
+  ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   ajax.send();
 };
 
